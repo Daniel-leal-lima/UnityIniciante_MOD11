@@ -32,32 +32,38 @@ public class SeletorDeEnigma : MonoBehaviour
         powerUpText.text = "Power-Up(" + usosPowerUp + "/" + usoMaxPowerUp + ")";
         index = Random.Range(0, lista.listaDeEnigmas.Count);
 
-        dificuldadeText.text = PegaDificuldade(lista.listaDeEnigmas[index].dificuldade);
+        if (lista.listaDeEnigmas.Count > 0)
+        {
+            dificuldadeText.text = PegaDificuldade(lista.listaDeEnigmas[index].dificuldade);
 
-        respostasPossiveis.Add(lista.listaDeEnigmas[index].respCorreta);
-        respostasPossiveis.Add(lista.listaDeEnigmas[index].respErrada1);
-        respostasPossiveis.Add(lista.listaDeEnigmas[index].respErrada2);
-        respostasPossiveis.Add(lista.listaDeEnigmas[index].respErrada3);
+            respostasPossiveis.Add(lista.listaDeEnigmas[index].respCorreta);
+            respostasPossiveis.Add(lista.listaDeEnigmas[index].respErrada1);
+            respostasPossiveis.Add(lista.listaDeEnigmas[index].respErrada2);
+            respostasPossiveis.Add(lista.listaDeEnigmas[index].respErrada3);
 
-        int indexResposta = Random.Range(0, respostasPossiveis.Count);
+            int indexResposta = Random.Range(0, respostasPossiveis.Count);
 
-        perguntaTexto.text = lista.listaDeEnigmas[index].pergunta;
+            perguntaTexto.text = lista.listaDeEnigmas[index].pergunta;
 
-        botao1Texto.text = respostasPossiveis[indexResposta];
-        respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
-        indexResposta = Random.Range(0, respostasPossiveis.Count);
+            botao1Texto.text = respostasPossiveis[indexResposta];
+            respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
+            indexResposta = Random.Range(0, respostasPossiveis.Count);
 
-        botao2Texto.text = respostasPossiveis[indexResposta];
-        respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
-        indexResposta = Random.Range(0, respostasPossiveis.Count);
+            botao2Texto.text = respostasPossiveis[indexResposta];
+            respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
+            indexResposta = Random.Range(0, respostasPossiveis.Count);
 
-        botao3Texto.text = respostasPossiveis[indexResposta];
-        respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
-        indexResposta = Random.Range(0, respostasPossiveis.Count);
+            botao3Texto.text = respostasPossiveis[indexResposta];
+            respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
+            indexResposta = Random.Range(0, respostasPossiveis.Count);
 
-        botao4Texto.text = respostasPossiveis[indexResposta];
-        respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
-
+            botao4Texto.text = respostasPossiveis[indexResposta];
+            respostasPossiveis.Remove(respostasPossiveis[indexResposta]);
+        }
+        else
+        {
+            Debug.Log("Parabéns! Você acertou todas as perguntas");
+        }
     }
 
     public void OnClick(Text TextoBotao)
@@ -65,6 +71,7 @@ public class SeletorDeEnigma : MonoBehaviour
         if(TextoBotao.text == lista.listaDeEnigmas[index].respCorreta)
         {
             Debug.Log("RESPOSTA CORRETA!");
+            AudioManager.instance.PlayAudio(AudioManager.IDCORRECT);
             lista.listaDeEnigmas.Remove(lista.listaDeEnigmas[index]);
             score += 5;
             scoreTexto.text = "Score: " + score.ToString();
@@ -80,6 +87,7 @@ public class SeletorDeEnigma : MonoBehaviour
         else
         {
             Debug.Log("RESPOSTA ERRADA!");
+            AudioManager.instance.PlayAudio(AudioManager.IDWRONG);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
@@ -89,6 +97,7 @@ public class SeletorDeEnigma : MonoBehaviour
         if (usosPowerUp > 0)
         {
             Debug.Log("USANDO POWER UP");
+            AudioManager.instance.PlayAudio(AudioManager.IDPOWERUP);
             usosPowerUp--;
             powerUpText.text = "Pula Questão(" + usosPowerUp + "/" + usoMaxPowerUp + ")";
             lista.listaDeEnigmas.Remove(lista.listaDeEnigmas[index]);
